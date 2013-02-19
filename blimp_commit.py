@@ -1,3 +1,4 @@
+import os
 import json
 import re
 
@@ -13,8 +14,21 @@ app_secret = ""
 blimp_userid = ""
 
 
+def get_env_setting(setting):
+    try:
+        return os.environ[setting]
+    except KeyError:
+        error_msg = "Set the %s env variable" % setting
+        raise RuntimeError(error_msg)
+
+API_USERNAME = get_env_setting('BLIMP_USERNAME')
+API_KEY = get_env_setting('BLIMP_API_KEY'),
+APP_ID = get_env_setting('BLIMP_APP_ID'),
+APP_SECRET = get_env_setting('BLIMP_APP_SECRET')
+
+
 def update_task(task_id, commit_msg, url, author):
-    api = blimp.Client(api_username, api_key, app_id, app_secret)
+    api = blimp.Client(API_USERNAME, API_KEY, APP_ID, APP_SECRET)
     comment = "%s: %s\n%s" % (
         author, 
         commit_msg.replace('t%s' % task_id, '').replace('#done', ''),
